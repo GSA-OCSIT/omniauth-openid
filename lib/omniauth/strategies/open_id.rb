@@ -27,6 +27,8 @@ module OmniAuth
       option :store, ::OpenID::Store::Memory.new
       option :identifier, nil
       option :identifier_param, 'openid_url'
+      option :preferred_auth_policies, []
+      option :max_auth_age, 500
 
       def dummy_app
         lambda{|env| [401, {"WWW-Authenticate" => Rack::OpenID.build_header(
@@ -34,6 +36,8 @@ module OmniAuth
           :return_to => callback_url,
           :required => options.required,
           :optional => options.optional,
+          :preferred_auth_policies => options.preferred_auth_policies,
+          :max_auth_age => options.max_auth_age,
           :method => 'post'
         )}, []]}
       end
